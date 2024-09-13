@@ -13,3 +13,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  Product Product[]
+}
+
+model Attribute {
+  id Int @id @default(autoincrement())
+  name String
+  value String
+  products AttributesOnProducts[]
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  price Decimal @db.Decimal(10, 2)
+  description String
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  attributes AttributesOnProducts[]
+}
+
+model AttributesOnProducts {
+  attribute Attribute @relation(fields: [attributeId], references: [id])
+  attributeId Int
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+  assignedAt DateTime @default(now())
+
+  @@id([attributeId, productId])
+}
