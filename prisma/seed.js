@@ -19,14 +19,21 @@ async function main() {
 	const sizeAttribute = await prisma.attribute.create({
 	  data: {
 		name: 'Size',
-		value: 'S', // Example value, can be customized
+		value: 'S',
 	  },
+	});
+
+	const wifiAttribute = await prisma.attribute.create({
+		data: {
+		  name: 'Wifi',
+		  value: 'True',
+		},
 	});
   
 	const colorAttribute = await prisma.attribute.create({
 	  data: {
 		name: 'Color',
-		value: 'Red', // Example value, can be customized
+		value: 'Red',
 	  },
 	});
   
@@ -51,6 +58,23 @@ async function main() {
 		},
 	  },
 	});
+
+	const microwave = await prisma.product.create({
+		data: {
+		  name: 'Microwave',
+		  price: 84.99,
+		  description: 'A nice microwave',
+		  categoryId: electronicsCategory.id,
+		  attributes: {
+			create: [
+			  {
+				attributeId: wifiAttribute.id,
+				assignedAt: new Date(),
+			  },
+			],
+		  },
+		},
+	  });
   
 	console.log('Seed data has been added.');
 }
